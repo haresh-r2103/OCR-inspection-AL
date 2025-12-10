@@ -1,0 +1,159 @@
+To check **whether this PC truly has CUDA-capable NVIDIA GPU and if PyTorch can use it**, follow these exact steps 👇
+(The wording “TRX / RTX 7…” suggests it *should* have it, but CUDA must be verified.)
+
+---
+
+# ✅ Step 1: Check if Windows sees an NVIDIA GPU
+
+### Press:
+
+```
+Win + X → Device Manager → Display adapters
+```
+
+You should see something like:
+
+* **NVIDIA RTX 3070 / 4070 / 3080 / A4000 / etc.**
+
+If you only see **Intel UHD / AMD Radeon**, then **no CUDA**.
+
+---
+
+# ✅ Step 2: Check CUDA availability with PyTorch
+
+Open **PowerShell** or **CMD**:
+
+```bat
+cd /d D:\ultralytics-main
+venv\Scripts\activate
+python
+```
+
+Then type in Python shell:
+
+```python
+import torch
+print("CUDA available? :", torch.cuda.is_available())
+print("GPU count :", torch.cuda.device_count())
+print("GPU name :", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "None")
+```
+
+### Expected if CUDA OK:
+
+```
+CUDA available? : True
+GPU count : 1
+GPU name : NVIDIA RTX XXXX
+```
+
+### If CUDA NOT OK:
+
+```
+CUDA available? : False
+GPU count : 0
+GPU name : None
+```
+
+---
+
+# ❗ If it shows False (no CUDA)
+
+Even though hardware has GPU, reasons could be:
+
+| Issue                            | Fix                              |
+| -------------------------------- | -------------------------------- |
+| NVIDIA driver missing / outdated | Install latest NVIDIA driver     |
+| CUDA Toolkit missing             | Install CUDA 11.8 toolkit        |
+| PyTorch installed CPU-only       | Reinstall with GPU-enabled Torch |
+
+---
+
+# 🛠 Fix: Install GPU-enabled PyTorch
+
+### Uninstall CPU torch (if installed):
+
+```bat
+pip uninstall torch torchvision torchaudio -y
+```
+
+### Install CUDA supported torch:
+
+```bat
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+```
+
+> This version works with CUDA 11.8 which matches YOLO v8 builds.
+
+---
+
+# 🔍 Step 3: Check NVIDIA driver version
+
+### Run in PowerShell:
+
+```bat
+nvidia-smi
+```
+
+If installed properly, you’ll see:
+
+```
++-------------------------------+
+| NVIDIA-SMI 535.xx Driver ...  |
+| GPU: RTX 4070, CUDA Version.. |
++-------------------------------+
+```
+
+If you see:
+
+```
+'nvidia-smi' is not recognized
+```
+
+→ GPU drivers are missing or corrupt → reinstall.
+
+---
+
+# 📌 Summary
+
+| Check                               | What to do                         |
+| ----------------------------------- | ---------------------------------- |
+| Device Manager shows NVIDIA         | Good, move to next                 |
+| `torch.cuda.is_available()` = True  | GPU training works                 |
+| `torch.cuda.is_available()` = False | reinstall GPU drivers + CUDA torch |
+| `nvidia-smi` works                  | CUDA runtime OK                    |
+
+---
+
+# 🧠 Bonus Tip
+
+To force GPU in your Train code (after fixing CUDA):
+
+```python
+device="cuda"
+```
+
+To fallback automatically:
+
+```python
+device = "cuda" if torch.cuda.is_available() else "cpu"
+```
+
+---
+
+# 📤 Next Step
+
+Send me the result of:
+
+```python
+torch.cuda.is_available()
+torch.cuda.get_device_name(0)
+```
+
+Once I know whether CUDA is detected, I’ll guide you:
+
+* either to fix GPU install
+* or confirm it's ready for fast training
+
+📸 You can even send a photo of the `nvidia-smi` output.
+
+Ready when you are 💪

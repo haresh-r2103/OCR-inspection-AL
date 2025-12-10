@@ -1,0 +1,44 @@
+# D:\ultralytics-main\ultralytics\cfg\datasets\custom.yaml
+
+# Base path for the dataset
+path: D:\ultralytics-main
+
+# These are relative to "path"
+train: images/images/train
+val: images/images/val
+
+# Number of classes and their names MUST match your CLASSES list in app.py
+# CLASSES = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F","G","H","J","K","L","M","N","P","R","S","T","V","W","X","Y"]
+
+names:
+  0: "0"
+  1: "1"
+  2: "2"
+  3: "3"
+  4: "4"
+  5: "5"
+  6: "6"
+  7: "7"
+  8: "8"
+  9: "9"
+  10: "A"
+  11: "B"
+  12: "C"
+  13: "D"
+  14: "E"
+  15: "F"
+  16: "G"
+  17: "H"
+  18: "J"
+  19: "K"
+  20: "L"
+  21: "M"
+  22: "N"
+  23: "P"
+  24: "R"
+  25: "S"
+  26: "T"
+  27: "V"
+  28: "W"
+  29: "X"
+  30: "Y"
